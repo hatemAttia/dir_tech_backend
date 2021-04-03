@@ -20,15 +20,11 @@ router.post('/new', (req, res) => {
             cin: req.body.cin,
             password: hashPAssword,
             phonenumber: req.body.phonenumber,
-            avatar: req.body.avatar,
+            avatar: "shared/images",
             matricule: req.body.matricule,
             level: req.body.level,
             description: req.body.description,
         }).then(Enseignant => {
-            // skilltest = db.skill.create({
-            //     name: "angular",
-            //     level: "bon",
-            // })
             if (skills.length > 0) {
                 skills.forEach(ski => {
                     db.Enseignant_skill.create({
@@ -39,7 +35,7 @@ router.post('/new', (req, res) => {
             }
             res.send(Enseignant)
         })
-    }).catch(error => console.log(error));
+    }).catch(error => res.status(500).json(error));
 });
 
 //afficher all teacher

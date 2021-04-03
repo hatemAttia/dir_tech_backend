@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
         cin: { type: DataTypes.INTEGER, allowNull: false },
         password: { type: DataTypes.STRING, allowNull: false },
         phonenumber: { type: DataTypes.INTEGER, allowNull: false },
+        matricule: { type: DataTypes.STRING, allowNull: false },
         avatar: { type: DataTypes.STRING, allowNull: false },
         poste: { type: DataTypes.STRING, allowNull: false },
 

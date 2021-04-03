@@ -21,6 +21,8 @@ app.use('/api/personel', personelRoutes);
 var offreRoutes = require("./routes/offre-routes");
 app.use('/api/offre', offreRoutes);
 
+var skillRoutes = require("./routes/skill-routes");
+app.use('/api/skill', skillRoutes);
 
 var enseignantRoutes = require("./routes/enseignant-routes");
 app.use('/api/enseignant', enseignantRoutes);

@@ -16,11 +16,12 @@ router.post('/new', (req, res) => {
             email: req.body.email,
             cin: req.body.cin,
             password: hashPAssword,
+            matricule: req.body.matricule,
             phonenumber: req.body.phonenumber,
-            avatar: req.body.avatar,
+            avatar: "shared/images",
             poste: req.body.poste,
         }).then(allPersonel => res.send(allPersonel));
-    }).catch(error => console.log(error));
+    }).catch(error => res.status(500).json(error));
 });
 
 //afficher all teacher

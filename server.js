@@ -9,6 +9,8 @@ app.use(express.json());
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
+
     next();
 });
 
@@ -25,11 +27,14 @@ var skillRoutes = require("./routes/skill-routes");
 app.use('/api/skill', skillRoutes);
 
 var enseignantRoutes = require("./routes/enseignant-routes");
-app.use('/api/enseignant', enseignantRoutes);
+app.use('/api/teacher', enseignantRoutes);
+
 
 
 var authRoutes = require("./controller/login");
 app.use('/api/auth/', authRoutes);
+
+app.use('/uploads', express.static('uploads'));
 
 
 app.get('/', function(req, res) {

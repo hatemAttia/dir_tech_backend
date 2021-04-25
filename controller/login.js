@@ -13,7 +13,7 @@ router.post('/admin', (req, res) => {
     }).then(Admin => {
         console.log(Admin)
 
-        if (!Admin.length <= 0) {
+        if (!Admin) {
             return res.status(401).json({ error: 'Utilisateur non trouvé !' });
         }
         const samePassword = passwordVerify(password, Admin[0].password, email).then(valid => {
@@ -44,7 +44,7 @@ router.post('/stuff', (req, res) => {
     }).then(Personel => {
         console.log(Personel)
 
-        if (!Personel.length <= 0) {
+        if (!Personel) {
             return res.status(401).json({ error: 'Utilisateur non trouvé !' });
         }
         const samePassword = passwordVerify(password, Personel[0].password, email).then(valid => {
@@ -71,31 +71,33 @@ router.post('/stuff', (req, res) => {
 router.post('/teacher', (req, res) => {
     var email = req.body.email;
     var password = req.body.password;
-    // console.log(req.body);
-    db.Admin.findAll({
+    db.Enseignant.findAll({
+        include: db.skill,
         where: { email: email }
-    }).then(Admin => {
-        console.log(Admin)
+    }).then(Enseignant => {
 
-        if (!Admin.length <= 0) {
+        if (!Enseignant) {
             return res.status(401).json({ error: 'Utilisateur non trouvé !' });
         }
-        const samePassword = passwordVerify(password, Admin[0].password, email).then(valid => {
-            //console.log(password + "++++++++++++++++" + Admin[0].password + "++++++++++++++++" + email);
+        const samePassword = passwordVerify(password, Enseignant[0].password, email).then(valid => {
             if (valid) {
                 res.status(200).json({
-                    id: Admin[0].id,
-                    firstname: Admin[0].firstname,
-                    lastname: Admin[0].lastname,
-                    email: Admin[0].email,
-                    cin: Admin[0].cin,
-                    phonenumber: Admin[0].phonenumber,
-                    avatar: Admin[0].avatar,
+                    id: Enseignant[0].id,
+                    firstname: Enseignant[0].firstname,
+                    lastname: Enseignant[0].lastname,
+                    email: Enseignant[0].email,
+                    cin: Enseignant[0].cin,
+                    phonenumber: Enseignant[0].phonenumber,
+                    avatar: Enseignant[0].avatar,
+                    matricule: Enseignant[0].matricule,
+                    level: Enseignant[0].level,
+                    description: Enseignant[0].description,
+                    skills: Enseignant[0].skills
                 });
             } else {
                 res.send("Incorrect Username and/or Password!");
             }
-        }).catch(error => res.status(500).json({ error: false }));
+        }).catch(error => res.status(500).json(error));
     }).catch(error => res.status(500).json({ error: false }));
 });
 module.exports = router;

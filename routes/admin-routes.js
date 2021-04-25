@@ -16,7 +16,7 @@ router.post('/new', (req, res) => {
                 cin: req.body.cin,
                 password: hashPAssword,
                 phonenumber: req.body.phonenumber,
-                avatar: req.body.avatar,
+                avatar: "uploads/user.png",
             }).then(newAdmin => res.send(newAdmin));
         })
         .catch(error => console.log(error));
@@ -38,9 +38,9 @@ router.use(function timeLog(req, res, next) {
     console.log('Time: ', Date.now());
     next();
 });
+
 // update admin
 router.put('/update/:id', (req, res) => {
-
     db.Admin.findOne({
         where: {
             id: req.params.id
@@ -54,12 +54,10 @@ router.put('/update/:id', (req, res) => {
         instance.email = req.body.email;
         instance.cin = req.body.cin;
         instance.phonenumber = req.body.phonenumber;
-        instance.avatar = req.body.avatar;
-
         instance.save().then(function() {
-            res.send('admin updated');
-        });
-    });
+            res.status(200).json(instance)
+        }).catch(error => console.log(error));;
+    }).catch(error => console.log(error));;
 });
 
 //delete admin
@@ -83,6 +81,8 @@ router.use(function timeLog(req, res, next) {
     next();
 });
 
+
+
 // upload img
 const storage = multer.diskStorage({
     destination: (req, file, callBack) => {
@@ -102,8 +102,24 @@ router.post('/file', upload.single('file'), (req, res, next) => {
         const error = new Error('No File')
         error.httpStatusCode = 400
         return next(error)
+    } else {
+        db.Admin.findOne({
+            where: {
+                //helooooooooooooooooooooooooooooooooooooooo
+                id: 2
+            }
+        }).then(function(instance) {
+            if (instance == null) {
+                res.send("admin not found")
+            }
+            instance.avatar = "uploads/" + file.filename;
+            instance.save().then(function(rowsUpdated) {
+                res.json(rowsUpdated)
+            }).catch(next);
+        });
+
+        // res.send(file);
     }
-    res.send(file);
 })
 
 module.exports = router;

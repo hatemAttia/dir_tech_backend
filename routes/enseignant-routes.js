@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { DataType, Sequelize } = require("sequelize");
 const { passwordHash, passwordVerify, } = require('nodejs-password');
+var multer = require('multer')
 
 const db = require("../models.bak");
 var skills = [{}];
@@ -20,7 +21,7 @@ router.post('/new', (req, res) => {
             cin: req.body.cin,
             password: hashPAssword,
             phonenumber: req.body.phonenumber,
-            avatar: "shared/images",
+            avatar: "uploads/user.png",
             matricule: req.body.matricule,
             level: req.body.level,
             description: req.body.description,
@@ -38,6 +39,30 @@ router.post('/new', (req, res) => {
     }).catch(error => res.status(500).json(error));
 });
 
+// update teacher
+router.put('/update/:id', (req, res) => {
+    db.Enseignant.findOne({
+        where: {
+            id: req.params.id
+        }
+    }).then(function(instance) {
+        if (instance == null) {
+            res.send("Teacher not found")
+        }
+        instance.firstname = req.body.firstname;
+        instance.lastname = req.body.lastname;
+        instance.cin = req.body.cin;
+        instance.level = req.body.level;
+        instance.description = req.body.description;
+        instance.matricule = req.body.matricule;
+        instance.phonenumber = req.body.phonenumber;
+        instance.save().then(function() {
+            res.status(200).json(instance)
+        }).catch(error => console.log(error));;
+    }).catch(error => console.log(error));;
+});
+
+
 //afficher all teacher
 router.get('/all', (req, res) => {
     db.Enseignant.findAll({
@@ -49,6 +74,21 @@ router.use(function timeLog(req, res, next) {
     next();
 });
 
+
+//afficher all teacher by skill
+router.post('/search', (req, res) => {
+    db.Enseignant.findAll({
+        include: [{
+            model: db.skill,
+            as: "skills",
+            where: {
+                name: req.body.skill
+            }
+        }]
+
+    }).then(allEnseignant => res.send(allEnseignant));
+})
+
 //afficher  teacher
 router.get('/:id', (req, res) => {
     db.Enseignant.findAll({
@@ -56,6 +96,45 @@ router.get('/:id', (req, res) => {
         include: [db.skill]
     }).then(allEnseignant => res.send(allEnseignant));
 })
+
+// upload img
+const storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        callBack(null, 'uploads')
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, Date.now() + `${file.originalname}`)
+    }
+})
+
+const upload = multer({ storage: storage })
+
+router.post('/file/:id', upload.single('file'), (req, res, next) => {
+    const file = req.file;
+    console.log(file.filename);
+    if (!file) {
+        const error = new Error('No File')
+        error.httpStatusCode = 400
+        return next(error)
+    } else {
+        db.Enseignant.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then(function(instance) {
+            if (instance == null) {
+                res.send("Teacher not found")
+            }
+            instance.avatar = "uploads/" + file.filename;
+            instance.save().then(function(rowsUpdated) {
+                res.json(rowsUpdated)
+            }).catch(next);
+        });
+
+        // res.send(file);
+    }
+})
+
 
 
 module.exports = router;

@@ -4,13 +4,14 @@ const { DataType, Sequelize } = require("sequelize");
 const db = require("../models.bak");
 
 // add  offre
-router.post('/new', (req, res) => {
+router.post('/new/:id', (req, res) => {
     db.offre.create({
         title: req.body.title,
         description: req.body.description,
         deadline: req.body.deadline,
         poste: req.body.poste,
-        PersonelId: req.body.personel.id
+        avatar: "uploads/user.png",
+        PersonelId: req.params.id
     }).then(offre => res.send(offre));
 });
 

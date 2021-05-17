@@ -4,8 +4,9 @@ const { DataType, Sequelize } = require("sequelize");
 const { passwordHash, passwordVerify, } = require('nodejs-password');
 var multer = require('multer')
 const db = require("../models.bak");
-
-// add teacher account
+var skills = [{}];
+var id = null;
+// add stuff account
 router.post('/new', (req, res) => {
     const salt = req.body.email;
     const password = req.body.password;
@@ -24,7 +25,7 @@ router.post('/new', (req, res) => {
     }).catch(error => res.status(500).json(error));
 });
 
-//afficher all teacher
+//afficher all stuff
 router.get('/all', (req, res) => {
     db.Personel.findAll({
         include: db.offre
@@ -35,7 +36,7 @@ router.use(function timeLog(req, res, next) {
     next();
 });
 
-//afficher all teacher
+//afficher all stuff
 router.get('/:id', (req, res) => {
     db.Personel.findAll({
         where: { id: req.params.id },
@@ -65,4 +66,44 @@ router.put('/update/:id', (req, res) => {
         }).catch(error => console.log(error));;
     }).catch(error => console.log(error));;
 });
+
+
+// upload img
+const storage = multer.diskStorage({
+    destination: (req, file, callBack) => {
+        callBack(null, 'uploads')
+    },
+    filename: (req, file, callBack) => {
+        callBack(null, Date.now() + `${file.originalname}`)
+    }
+})
+
+const upload = multer({ storage: storage })
+
+router.post('/file/:id', upload.single('file'), (req, res, next) => {
+    const file = req.file;
+    console.log(file.filename);
+    if (!file) {
+        const error = new Error('No File')
+        error.httpStatusCode = 400
+        return next(error)
+    } else {
+        db.Personel.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then(function(instance) {
+            if (instance == null) {
+                res.send("Personel not found")
+            }
+            instance.avatar = "uploads/" + file.filename;
+            instance.save().then(function(rowsUpdated) {
+                res.json(rowsUpdated)
+            }).catch(next);
+        });
+
+        // res.send(file);
+    }
+})
+
 module.exports = router;

@@ -18,7 +18,7 @@ var adminRoutes = require("./routes/admin-routes");
 app.use('/api/admin', adminRoutes);
 
 var personelRoutes = require("./routes/personel-routes");
-app.use('/api/personel', personelRoutes);
+app.use('/api/stuff', personelRoutes);
 
 var offreRoutes = require("./routes/offre-routes");
 app.use('/api/offre', offreRoutes);

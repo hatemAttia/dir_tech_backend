@@ -41,6 +41,7 @@ router.post('/new', (req, res) => {
 
 // update teacher
 router.put('/update/:id', (req, res) => {
+
     db.Enseignant.findOne({
         where: {
             id: req.params.id
@@ -62,6 +63,51 @@ router.put('/update/:id', (req, res) => {
     }).catch(error => console.log(error));;
 });
 
+// update skill teacher
+router.post('/addskill/:id', (req, res) => {
+    skills = req.body.skill;
+    db.Enseignant.findOne({
+        where: {
+            id: req.params.id
+        }
+    }).then(Enseignant => {
+        if (Enseignant == null) {
+            res.send("Teacher not found")
+        }
+
+        if (skills.length > 0) {
+            skills.forEach(ski => {
+                db.Enseignant_skill.create({
+                    skillId: ski.id,
+                    EnseignantId: Enseignant.id
+                }).then(skil => res.send(skil));
+            })
+        }
+        res.status(200).send({ res: "skill added" })
+    }).catch(error => console.log(error));;
+});
+
+
+/**
+ * delete skill teacher
+ */
+router.post('/deleteskill/', (req, res) => {
+    db.Enseignant_skill.findOne({
+        where: {
+            EnseignantId: req.body.EnseignantId,
+            skillId: req.body.skillId
+        }
+    }).then(function(instance) {
+        console.log(instance)
+        if (instance == null) {
+            res.send("Skill not found")
+        } else {
+            instance.destroy().then(function() {
+                res.status(200).send({ res: "skill deleted" })
+            }).catch(error => console.log(error));
+        }
+    });
+});
 
 //afficher all teacher
 router.get('/all', (req, res) => {
@@ -91,7 +137,7 @@ router.post('/search', (req, res) => {
 
 //afficher  teacher
 router.get('/:id', (req, res) => {
-    db.Enseignant.findAll({
+    db.Enseignant.findOne({
         where: { id: req.params.id },
         include: [db.skill]
     }).then(allEnseignant => res.send(allEnseignant));

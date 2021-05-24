@@ -67,12 +67,14 @@ router.delete('/delete/:id', (req, res) => {
             id: req.params.id
         }
     }).then(function(instance) {
+        console.log(instance)
         if (instance == null) {
-            res.send("admin not found")
+            res.send("Skill not found")
+        } else {
+            instance.destroy().then(function() {
+                res.status(200).send({ res: "skill deleted" })
+            }).catch(error => console.log(error));
         }
-        instance.destroy().then(function() {
-            res.send('admin removed');
-        });
     });
 });
 

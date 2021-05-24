@@ -36,9 +36,9 @@ router.use(function timeLog(req, res, next) {
     next();
 });
 
-//afficher all stuff
+//afficher stuff
 router.get('/:id', (req, res) => {
-    db.Personel.findAll({
+    db.Personel.findOne({
         where: { id: req.params.id },
         include: [db.offre]
     }).then(allPersonel => res.send(allPersonel));
@@ -67,6 +67,23 @@ router.put('/update/:id', (req, res) => {
     }).catch(error => console.log(error));;
 });
 
+//delete stuff
+router.delete('/delete/:id', (req, res) => {
+    db.Personel.findOne({
+        where: {
+            id: req.params.id
+        }
+    }).then(function(instance) {
+        console.log(instance)
+        if (instance == null) {
+            res.send("Personel not found")
+        } else {
+            instance.destroy().then(function() {
+                res.status(200).send({ res: "Personel deleted" })
+            }).catch(error => console.log(error));
+        }
+    });
+});
 
 // upload img
 const storage = multer.diskStorage({

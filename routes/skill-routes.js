@@ -33,7 +33,7 @@ router.put('/update/:id', (req, res) => {
 });
 
 /**
- * delete skil
+ * delete skill
  */
 router.delete('/delete/:id', (req, res) => {
     db.skill.findOne({

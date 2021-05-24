@@ -12,7 +12,6 @@ router.post('/admin', (req, res) => {
         where: { email: email }
     }).then(Admin => {
         console.log(Admin)
-
         if (!Admin) {
             return res.status(401).json({ error: 'Utilisateur non trouvé !' });
         }
@@ -40,14 +39,13 @@ router.post('/stuff', (req, res) => {
     var password = req.body.password;
     // console.log(req.body);
     db.Personel.findAll({
-        where: { email: email }
+        where: { email: email },
+        include: db.offre
     }).then(Personel => {
-        console.log(Personel)
-
         if (!Personel) {
             return res.status(401).json({ error: 'Utilisateur non trouvé !' });
         }
-        const samePassword = passwordVerify(password, Personel[0].password, email).then(valid => {
+            passwordVerify(password, Personel[0].password, email).then(valid => {
             //console.log(password + "++++++++++++++++" + Personel[0].password + "++++++++++++++++" + email);
             if (valid) {
                 res.status(200).json({
@@ -60,6 +58,7 @@ router.post('/stuff', (req, res) => {
                     avatar: Personel[0].avatar,
                     poste: Personel[0].poste,
                     matricule: Personel[0].matricule,
+                    offres: Personel[0].offres
                 });
             } else {
                 res.send("Incorrect Username and/or Password!");

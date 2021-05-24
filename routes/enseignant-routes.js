@@ -120,6 +120,23 @@ router.use(function timeLog(req, res, next) {
     next();
 });
 
+//delete teacher
+router.delete('/delete/:id', (req, res) => {
+    db.Enseignant.findOne({
+        where: {
+            id: req.params.id
+        }
+    }).then(function(instance) {
+        console.log(instance)
+        if (instance == null) {
+            res.send("Skill not found")
+        } else {
+            instance.destroy().then(function() {
+                res.status(200).send({ res: "skill deleted" })
+            }).catch(error => console.log(error));
+        }
+    });
+});
 
 //afficher all teacher by skill
 router.post('/search', (req, res) => {

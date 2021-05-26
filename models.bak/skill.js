@@ -11,6 +11,13 @@ module.exports = (sequelize, DataTypes) => {
             through: 'Enseignant_skill',
         });
     }
+    skill.associate = models => {
+        skill.belongsTo(models.category, {
+            foreignKey: {
+                allowNull: false
+            }
+        });
 
+    }
     return skill;
 }

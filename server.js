@@ -26,9 +26,12 @@ app.use('/api/offre', offreRoutes);
 var skillRoutes = require("./routes/skill-routes");
 app.use('/api/skill', skillRoutes);
 
+var skillRoutes = require("./routes/category-routes");
+app.use('/api/category', skillRoutes);
+
+
 var enseignantRoutes = require("./routes/enseignant-routes");
 app.use('/api/teacher', enseignantRoutes);
-
 
 
 var authRoutes = require("./controller/login");

@@ -152,6 +152,20 @@ router.post('/search', (req, res) => {
     }).then(allEnseignant => res.send(allEnseignant));
 })
 
+//afficher all teacher by skill
+router.get('/search/:id', (req, res) => {
+    db.Enseignant.findAll({
+        include: [{
+            model: db.skill,
+            as: "skills",
+            where: {
+                categoryId: req.params.id
+            }
+        }]
+
+    }).then(allEnseignant => res.send(allEnseignant));
+})
+
 //afficher  teacher
 router.get('/:id', (req, res) => {
     db.Enseignant.findOne({

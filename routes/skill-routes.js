@@ -3,14 +3,23 @@ const router = express.Router();
 const db = require("../models.bak");
 
 // add skill 
-router.post('/new', (req, res) => {
-    db.skill.create({
-        name: req.body.name,
-    }).then(newskill => res.send(newskill));
+router.post('/new/:id', (req, res) => {
+    db.category.findOne({
+        where: {
+            id: req.params.id
+        },
+    }).then(category => {
+        db.skill.create({
+            name: req.body.name,
+            categoryId: req.params.id
+        }).then(newskill => res.send(newskill));
+    });
 });
 
 router.get('/all', (req, res) => {
-    db.skill.findAll().then(skill => res.status(200).json(skill));
+    db.skill.findAll({
+        include: db.category
+    }).then(skill => res.status(200).json(skill));
 })
 
 /**
@@ -26,6 +35,7 @@ router.put('/update/:id', (req, res) => {
             res.send("skill not found")
         }
         instance.name = req.body.name;
+        instance.categoryId = req.body.categoryId;
         instance.save().then(function() {
             res.status(200).json(instance)
         }).catch(error => console.log(error));

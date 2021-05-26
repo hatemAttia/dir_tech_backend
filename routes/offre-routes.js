@@ -16,7 +16,7 @@ router.post('/new/:id', (req, res) => {
             description: req.body.description,
             deadline: req.body.deadline,
             poste: req.body.poste,
-            avatar: "uploads/user.png",
+            avatar: "uploads/download.jpeg",
             PersonelId: req.params.id
         }).then(offre => res.send(Personel));
     })

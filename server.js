@@ -43,7 +43,7 @@ app.use('/uploads', express.static('uploads'));
 app.get('/', function(req, res) {
     res.send('hello world');
 });
-db.sequelize.sync().then(() => {
+db.sequelize.sync({ alter: true }).then(() => {
     app.listen(PORT, () => {
         console.log(`listing at http://localhost:${PORT}`);
     })

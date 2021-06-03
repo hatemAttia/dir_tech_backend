@@ -17,6 +17,12 @@ module.exports = (sequelize, DataTypes) => {
         matricule: { type: DataTypes.STRING, allowNull: false },
         level: { type: DataTypes.STRING, allowNull: false },
         description: { type: DataTypes.STRING, allowNull: false },
+        //plus
+        degreeobtained: { type: DataTypes.STRING, allowNull: true },
+        diplomainstituation: { type: DataTypes.STRING, allowNull: true },
+        yearsexperience: { type: DataTypes.STRING, allowNull: true },
+        url: { type: DataTypes.STRING, allowNull: true },
+        certificat: { type: DataTypes.STRING, allowNull: true },
     });
     Enseignant.associate = models => {
         Enseignant.belongsToMany(models.skill, {

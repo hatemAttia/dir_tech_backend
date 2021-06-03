@@ -45,7 +45,7 @@ router.post('/stuff', (req, res) => {
         if (!Personel) {
             return res.status(401).json({ error: 'Utilisateur non trouvé !' });
         }
-            passwordVerify(password, Personel[0].password, email).then(valid => {
+        passwordVerify(password, Personel[0].password, email).then(valid => {
             //console.log(password + "++++++++++++++++" + Personel[0].password + "++++++++++++++++" + email);
             if (valid) {
                 res.status(200).json({
@@ -91,6 +91,11 @@ router.post('/teacher', (req, res) => {
                     matricule: Enseignant[0].matricule,
                     level: Enseignant[0].level,
                     description: Enseignant[0].description,
+                    degreeobtained: Enseignant[0].degreeobtained,
+                    diplomainstituation: Enseignant[0].diplomainstituation,
+                    yearsexperience: Enseignant[0].yearsexperience,
+                    url: Enseignant[0].url,
+                    certificat: Enseignant[0].certificat,
                     skills: Enseignant[0].skills
                 });
             } else {

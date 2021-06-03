@@ -25,6 +25,12 @@ router.post('/new', (req, res) => {
             matricule: req.body.matricule,
             level: req.body.level,
             description: req.body.description,
+            //plus
+            degreeobtained: req.body.degreeobtained,
+            diplomainstituation: req.body.diplomainstituation,
+            yearsexperience: req.body.yearsexperience,
+            url: req.body.url,
+            certificat: req.body.certificat
         }).then(Enseignant => {
             if (skills.length > 0) {
                 skills.forEach(ski => {
@@ -57,6 +63,12 @@ router.put('/update/:id', (req, res) => {
         instance.description = req.body.description;
         instance.matricule = req.body.matricule;
         instance.phonenumber = req.body.phonenumber;
+        instance.degreeobtained = req.body.degreeobtained;
+        instance.diplomainstituation = req.body.diplomainstituation;
+        instance.yearsexperience = req.body.yearsexperience;
+        instance.url = req.body.url;
+        instance.certificat = req.body.certificat;
+
         instance.save().then(function() {
             res.status(200).json(instance)
         }).catch(error => console.log(error));;

@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../models.bak");
 const { passwordHash, passwordVerify, } = require('nodejs-password');
 var multer = require('multer')
+const nodemailer = require("nodemailer");
 
 // add admin account
 router.post('/new', (req, res) => {
@@ -123,5 +124,40 @@ router.post('/file', upload.single('file'), (req, res, next) => {
         // res.send(file);
     }
 })
+router.post('/mail', (req, res) => {
+
+    const {
+        emailp,
+        email,
+        obj,
+        msg
+    } = req.body
+    console.log(req.body)
+
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'attia00018@gmail.com',
+            pass: '5549567119970Tt'
+        }
+    });
+
+    var mailOptions = {
+        from: emailp,
+        to: email,
+        subject: "email from " + emailp + " about " + obj,
+        text: msg
+    };
+
+    transporter.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
+    res.status(200).json('message envoyé')
+
+});
 
 module.exports = router;

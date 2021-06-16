@@ -19,7 +19,7 @@ router.post('/new', (req, res) => {
             password: hashPAssword,
             matricule: req.body.matricule,
             phonenumber: req.body.phonenumber,
-            avatar: "shared/images",
+            avatar: "uploads/user.png",
             poste: req.body.poste,
         }).then(allPersonel => res.send(allPersonel));
     }).catch(error => res.status(500).json(error));

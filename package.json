@@ -15,6 +15,7 @@
         "multer": "^1.4.2",
         "mysql2": "^2.2.5",
         "nodejs-password": "^1.0.2",
+        "nodemailer": "^6.6.1",
         "postgres": "^1.0.2",
         "sequelize": "^6.6.1",
         "sqlite3": "^5.0.2",
